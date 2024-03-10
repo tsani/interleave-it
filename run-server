@@ -1,0 +1,3 @@
+#!/bin/bash
+
+OUTPUT_DIR=output/ UPLOAD_DIR=uploads/ exec python api.py

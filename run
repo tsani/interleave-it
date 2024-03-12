@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Runs the production WSGI server
+
+exec gunicorn -w ${WORKERS:-1} 'api:app'

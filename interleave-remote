@@ -22,8 +22,6 @@ done
 
 CMD="$CMD 'http://localhost:5000/interleave?pages_per_copy=$PAGES_PER_COPY&output_name=$OUTFILE'"
 
-echo "Running: $CMD"
-
 output="$(eval "$CMD")"
 
 echo "$output"

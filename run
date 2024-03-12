@@ -2,4 +2,4 @@
 
 # Runs the production WSGI server
 
-exec gunicorn -w ${WORKERS:-1} 'api:app'
+exec gunicorn -w ${WORKERS:-1} -b "${BIND:-localhost:5000}" 'api:app'

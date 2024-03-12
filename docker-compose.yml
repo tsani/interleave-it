@@ -1,0 +1,22 @@
+version: '3.5'
+
+services:
+  interleave-it:
+    image: jerrington/interleave-it:latest
+    restart: unless-stopped
+    stop_grace_period: 5s
+    ports:
+      - "5000:5000" # HTTP port (host:container)
+    environment:
+      - SERVER_NAME=localhost:5000
+      - OUTPUT_DIR=/output
+      - UPLOAD_DIR=/uploads
+      - WORKERS=4
+      - BIND=localhost:5000
+    volumes:
+      - output:/output
+      - uploads:/uploads
+
+volumes:
+  output:
+  uploads:

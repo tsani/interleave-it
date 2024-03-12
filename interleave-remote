@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -e
+
+# Uses curl to send files to an interleave-it API server.
+
+OUTFILE=${1:?missing required parameter specifying output filename}
+shift
+PAGES_PER_COPY=${1:?missing required parameter specifying pages per copy}
+shift
+
+: ${1:?missing at least one PDF file to upload}
+
+# Now all remaining positional arguments are PDF file names
+
+CMD="curl "
+
+while (( $# )) ; do
+    CMD="$CMD -F 'files[]=@$1' "
+    shift
+done
+
+CMD="$CMD 'http://localhost:5000/interleave?pages_per_copy=$PAGES_PER_COPY&output_name=$OUTFILE'"
+
+echo "Running: $CMD"
+
+output="$(eval "$CMD")"
+
+echo "$output"
+if ! which jq > /dev/null ; then
+    echo "$output"
+    exit 0
+fi
+
+# If jq is installed, then we'll extract the URL and download it.
+
+result_url="$(echo "$output" | jq -r .result)"
+exec curl "$result_url" > "$OUTFILE"

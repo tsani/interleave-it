@@ -23,15 +23,14 @@ def die(*args):
 
 app.config['UPLOAD_DIR'] = os.environ.get('UPLOAD_DIR') \
     or die('missing environment variable UPLOAD_DIR')
-
 app.config['OUTPUT_DIR'] = os.environ.get('OUTPUT_DIR') \
     or die('missing environment variable OUTPUT_DIR')
-
 app.config['MAX_CONTENT_LENGTH'] = os.environ.get('MAX_CONTENT_LENGTH') \
     or 32 * 1024 * 1024 # MiB expressed as bytes
-
 app.config['SERVER_NAME'] = os.environ.get('SERVER_NAME') \
     or die('missing environment variable SERVER_NAME')
+app.config['OUTPUT_BASE_URL'] = os.environ.get('OUTPUT_BASE_URL') \
+    or None
 
 @app.route('/interleave/<filename>')
 def interleave_output(filename, methods=['GET']):
@@ -88,13 +87,18 @@ def interleave_route():
         saved_filepaths,
     )
 
-    return jsonify({
-        'result': url_for(
-            'interleave_output',
-            _external=True,
-            filename=output_filename,
-        ),
-    })
+    if app.config['OUTPUT_BASE_URL']:
+        return jsonify({
+            'result': app.config['OUTPUT_BASE_URL'] + output_filename
+        })
+    else:
+        return jsonify({
+            'result': url_for(
+                'interleave_output',
+                _external=True,
+                filename=output_filename,
+            ),
+        })
 
 if __name__ == '__main__':
     app.run(debug=True)

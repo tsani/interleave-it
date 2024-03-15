@@ -2,7 +2,7 @@
 # Uses curl to send files to an interleave-it API server.
 
 set -e
-BASE_URL=${BASE_URL:-http://localhost:5000}
+BASE_URL=${BASE_URL:-http://localhost:8080/api}
 OUTFILE=${1:?missing required parameter specifying output filename}
 shift
 PAGES_PER_COPY=${1:?missing required parameter specifying pages per copy}
@@ -23,7 +23,6 @@ CMD="$CMD '$BASE_URL/interleave?pages_per_copy=$PAGES_PER_COPY&output_name=$OUTF
 
 output="$(eval "$CMD")"
 
-echo "$output"
 if ! which jq > /dev/null ; then
     echo "$output"
     exit 0

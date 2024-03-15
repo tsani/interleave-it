@@ -1,5 +1,9 @@
 #!/bin/bash
 
 # Runs the production WSGI server
+# Several configuration env vars are required to run the interleave-it API server.
+# You generally shouldn't run this script directly from the command-line.
+# This is meant to be the entrypoint for interleave-it docker container.
+# See docker-compose.yml which configures the env vars.
 
-exec gunicorn -w ${WORKERS:-1} -b "${BIND:-localhost:5000}" 'api:app'
+exec gunicorn -w ${WORKERS:-1} -b "${BIND:-localhost:5000}" 'interleave.api:app'

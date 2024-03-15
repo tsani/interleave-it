@@ -27,8 +27,6 @@ app.config['OUTPUT_DIR'] = os.environ.get('OUTPUT_DIR') \
     or die('missing environment variable OUTPUT_DIR')
 app.config['MAX_CONTENT_LENGTH'] = os.environ.get('MAX_CONTENT_LENGTH') \
     or 32 * 1024 * 1024 # MiB expressed as bytes
-app.config['SERVER_NAME'] = os.environ.get('SERVER_NAME') \
-    or die('missing environment variable SERVER_NAME')
 app.config['OUTPUT_BASE_URL'] = os.environ.get('OUTPUT_BASE_URL') \
     or None
 
@@ -100,5 +98,11 @@ def interleave_route():
             ),
         })
 
+@app.route('/echo/<foo>')
+def echo(foo):
+    return foo
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    from os import environ
+    host, port = environ['BIND'].split(':')
+    app.run(host=host, port=port, debug=True)

@@ -1,3 +1,11 @@
 #!/bin/bash
 
-SERVER_NAME=localhost:5000 OUTPUT_DIR=output/ UPLOAD_DIR=uploads/ exec python api.py
+# This script locally runs the API server.
+
+set -e
+
+# Set defaults for these variables in case we're not running thru docker
+BIND=${BIND:-localhost:5000} \
+OUTPUT_DIR=${OUTPUT_DIR:-output/} \
+UPLOAD_DIR=${UPLOAD_DIR:-uploads/} \
+exec python interleave/api.py

@@ -13,7 +13,7 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 
-from interleave import interleave
+from core import interleave
 
 app = Flask(__name__)
 

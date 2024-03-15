@@ -31,9 +31,9 @@ Restrictions:
 $ ./python -m venv .
 $ pip install -r requirements.txt
 $ source bin/activate
-$ ./python interleave.py -h
+$ ./python interleave -h
 
-usage: interleave.py [-h] DEST PAGES FILES [FILES ...]
+usage: interleave [-h] DEST PAGES FILES [FILES ...]
 
 Combines multiple (crowdmark) PDFs into a single one, interleaving the copies.
 Each input PDF file must have the same number of copies, and each exam copy

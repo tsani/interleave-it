@@ -49,3 +49,33 @@ options:
 
 $ python interleave.py combined-versions.pdf 10 version1.pdf version2.pdf
 ```
+
+# Web API usage
+
+This repo also includes a Flask HTTP API for hosting a server that interleaves PDFs.
+See the following files to better understand the devops:
+
+- `default.conf`: nginx reverse proxy configuration
+    - serves output PDFs from a directory (docker volume)
+    - serves static content from `html/`
+    - routes `/api/<foo>` into the Flask app, stripping away the `/api` prefix.
+- `docker-compose.yml`: describes a setup with nginx and Flask running side-by-side
+    - defines env vars necessary to run the Flask app
+    - sets up docker volumes so nginx and Flask both work with the same output directory
+    - mounts `html/` into the nginx container
+    - this is a dev workflow setup
+        - the entire source tree is bind-mounted into the `jerrington/interleave-it` container
+        - the entrypoint (normally the production `run` script) is overridden to use `debug`
+          instead
+        - upshot: editing the Python code will automatically restart the API server thanks to
+          Flask's built-in debug runner, nginx will see changes immediately to HTML files due to
+          the bind-mount.
+
+To run the dev setup, it suffices to do the following:
+
+- Build the interleave-it container: `docker build -t jerrington/interleave-it .`
+- Run the docker-compose project: `docker-compose up`
+- Edit static content under `html/` and the backend code under `interleave/`.
+- The server runs on port 8080 (on the host), so visit `http://localhost:8080`.
+- Use the bundled script `interleave-remote` to use curl to upload PDFs to test the interleaving
+  API.

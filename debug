@@ -6,6 +6,6 @@ set -e
 
 # Set defaults for these variables in case we're not running thru docker
 BIND=${BIND:-localhost:5000} \
-OUTPUT_DIR=${OUTPUT_DIR:-output/} \
-UPLOAD_DIR=${UPLOAD_DIR:-uploads/} \
+OUTPUT_DIR=${OUTPUT_DIR:-$PWD/output/} \
+UPLOAD_DIR=${UPLOAD_DIR:-$PWD/uploads/} \
 exec python interleave/api.py

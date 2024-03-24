@@ -2,9 +2,35 @@
 
 <html>
     <head>
-        <title>Hi</title>
+        <title>Interleave it</title>
     </head>
     <body>
-        <h1>Hi!</h1>
+        <h1>Interleave PDFs</h1>
+        <form id="interleave-form" enctype="multipart/form-data" method="post" action='/interleave'>
+            <ul>
+                <li>
+                    <label for="output_name">
+                        Output name (optional)
+                        <input id="output_name" name="output_name" type="text">
+                    </label>
+                </li>
+                <li>
+                    <label for="pages_per_copy">
+                        Pages per copy
+                        <input id="pages_per_copy" name="pages_per_copy" type="number">
+                    </label>
+                </li>
+            </ul>
+            <div>
+                <label for="file-N">
+                    <span>Files</span>
+                    <input id="file-N" name="files[]" type="file" multiple> <br>
+                    <span>
+                        Note that documents are interleaved in the order in which they are selected.
+                    </span>
+                </label>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
     </body>
 </html>

@@ -30,7 +30,7 @@ app.config['MAX_CONTENT_LENGTH'] = os.environ.get('MAX_CONTENT_LENGTH') \
 app.config['OUTPUT_BASE_URL'] = os.environ.get('OUTPUT_BASE_URL') \
     or None
 
-@app.route('/interleave/<filename>')
+@app.route('/interleave/<path:filename>')
 def interleave_output(filename, methods=['GET']):
     return send_from_directory(app.config['OUTPUT_DIR'], filename)
 
@@ -38,7 +38,7 @@ def interleave_output(filename, methods=['GET']):
 def interleave_route():
     ### GET AND VALIDATE INPUTS ###
 
-    pages_per_copy = request.args.get('pages_per_copy')
+    pages_per_copy = request.form.get('pages_per_copy')
     if not pages_per_copy:
         return jsonify({
             'message': 'missing requires query string parameter `pages_per_copy`',
@@ -57,7 +57,7 @@ def interleave_route():
         }), 400
     files = request.files.getlist('files[]')
 
-    output_filename = request.args.get('output_name') or ''
+    output_filename = request.form.get('output_name') or ''
     output_filename = secure_filename(output_filename).removesuffix('.pdf')
 
     ### DO THE THING ###
@@ -85,22 +85,24 @@ def interleave_route():
         saved_filepaths,
     )
 
-    if app.config['OUTPUT_BASE_URL']:
-        return jsonify({
-            'result': app.config['OUTPUT_BASE_URL'] + output_filename
-        })
-    else:
-        return jsonify({
-            'result': url_for(
-                'interleave_output',
-                _external=True,
-                filename=output_filename,
-            ),
-        })
+    result_url = \
+        app.config['OUTPUT_BASE_URL'] + output_filename \
+        if app.config['OUTPUT_BASE_URL'] else \
+        url_for(
+            'interleave_output',
+            _external=True,
+            filename=output_filename,
+        )
 
-@app.route('/echo/<foo>')
-def echo(foo):
-    return foo
+    accept_header = request.headers.get('Accept');
+    if 'application/json' in accept_header:
+        return jsonify({ 'result': result_url });
+    else:
+        return redirect(result_url)
+
+@app.route('/<path:filename>')
+def index(filename):
+    return send_from_directory('../html', filename);
 
 if __name__ == '__main__':
     from os import environ

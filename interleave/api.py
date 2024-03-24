@@ -13,7 +13,7 @@ from flask import (
 )
 from werkzeug.utils import secure_filename
 
-from core import interleave
+from .core import interleave
 
 app = Flask(__name__)
 
@@ -99,10 +99,6 @@ def interleave_route():
         return jsonify({ 'result': result_url });
     else:
         return redirect(result_url)
-
-@app.route('/<path:filename>')
-def index(filename):
-    return send_from_directory('../html', filename);
 
 if __name__ == '__main__':
     from os import environ

@@ -8,4 +8,4 @@ set -e
 BIND=${BIND:-localhost:5000} \
 OUTPUT_DIR=${OUTPUT_DIR:-$PWD/output/} \
 UPLOAD_DIR=${UPLOAD_DIR:-$PWD/uploads/} \
-exec python interleave/api.py
+exec python -m interleave.api

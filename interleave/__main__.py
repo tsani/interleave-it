@@ -1,6 +1,6 @@
 import argparse
 
-from core import interleave
+from .core import interleave
 
 parser = argparse.ArgumentParser(
     description="Combines multiple (crowdmark) PDFs into a single one, "
